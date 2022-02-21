@@ -13,6 +13,7 @@ import { QueriedFilesProvider } from "../utils/providers/QueriedFiles.provider";
 import { StorageProvider } from "../utils/providers/Database.provider";
 
 import { NextSeo } from "next-seo";
+import Script from "next/script";
 
 function App({ Component, pageProps }: AppProps) {
   const supportedChainIds = [config.chainId];
@@ -39,6 +40,21 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Script
+        strategy="lazyOnload"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+      />
+
+      <Script id="google-analytics" strategy="lazyOnload">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}', {
+              page_path: window.location.pathname,
+            });
+                `}
+      </Script>
       <NextSeo
         title="Vault3 | Your Safest Decentralized Vault"
         description="Secure your passwords, images, documents and much more on-chain with Vault3."
